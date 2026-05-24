@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yada Dev — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --border: #1e1e2e;
+    --accent: #7c6aff;
+    --accent2: #ff6a7c;
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --card: #16161f;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    /* cursor: none; */
+  }
+
+  /* Custom cursor */
+  /* .cursor {
+    width: 10px; height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transition: transform 0.15s ease;
+    mix-blend-mode: screen;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9998;
+    transition: all 0.2s ease;
+    opacity: 0.5;
+  } */
+
+  /* Grid bg */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Nav */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.2rem 2.5rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(12px);
+  }
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem; color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a {
+    font-size: 0.8rem; color: var(--muted);
+    text-decoration: none; letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* Hero */
+  .hero {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    padding: 8rem 2.5rem 4rem;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .hero-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem; color: var(--accent);
+    letter-spacing: 0.2em; text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .hero-label::before {
+    content: ''; display: block;
+    width: 32px; height: 1px; background: var(--accent);
+  }
+  h1 {
+    font-size: clamp(3rem, 9vw, 7rem);
+    font-weight: 800; line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 2rem;
+  }
+  h1 span { color: var(--accent); }
+  .hero-desc {
+    font-size: 1.1rem; color: var(--muted);
+    max-width: 480px; line-height: 1.7;
+    margin-bottom: 3rem;
+  }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn {
+    padding: 0.8rem 2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem; letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: all 0.2s;
+    cursor: none;
+  }
+  .btn-primary {
+    background: var(--accent); color: #fff;
+    border: 1px solid var(--accent);
+  }
+  .btn-primary:hover { background: transparent; color: var(--accent); }
+  .btn-outline {
+    background: transparent; color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Stack badges */
+  .stack {
+    position: absolute; right: 2.5rem; top: 50%;
+    transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 0.6rem;
+  }
+  .badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem; color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.9rem; border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .badge:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* Sections */
+  section {
+    position: relative; z-index: 1;
+    max-width: 1100px; margin: 0 auto;
+    padding: 5rem 2.5rem;
+  }
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem; color: var(--accent);
+    letter-spacing: 0.2em; text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  h2 {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800; letter-spacing: -0.02em;
+    margin-bottom: 3rem;
+  }
+
+  /* Projects grid */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5px;
+    border: 1px solid var(--border);
+  }
+  .project-card {
+    background: var(--card);
+    padding: 2rem;
+    transition: background 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .project-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 3px; height: 0;
+    background: var(--accent);
+    transition: height 0.3s;
+  }
+  .project-card:hover { background: var(--surface); }
+  .project-card:hover::before { height: 100%; }
+  .project-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem; color: var(--muted);
+    margin-bottom: 1.2rem; letter-spacing: 0.1em;
+  }
+  .project-title {
+    font-size: 1.2rem; font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+  .project-desc {
+    font-size: 0.85rem; color: var(--muted);
+    line-height: 1.7; margin-bottom: 1.5rem;
+  }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.2rem; }
+  .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem; color: var(--accent);
+    border: 1px solid rgba(124,106,255,0.3);
+    padding: 0.2rem 0.6rem; border-radius: 2px;
+    background: rgba(124,106,255,0.06);
+  }
+  .project-link {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem; color: var(--muted);
+    text-decoration: none; letter-spacing: 0.1em;
+    transition: color 0.2s;
+  }
+  .project-link:hover { color: var(--accent); }
+
+  /* Skills */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1px;
+    border: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+  .skill-item {
+    background: var(--card);
+    padding: 1.5rem;
+    transition: background 0.2s;
+  }
+  .skill-item:hover { background: var(--surface); }
+  .skill-category {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem; color: var(--accent2);
+    letter-spacing: 0.15em; text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .skill-list {
+    font-size: 0.85rem; color: var(--muted);
+    line-height: 2;
+  }
+
+  /* Contact */
+  .contact-inner {
+    border: 1px solid var(--border);
+    padding: 3rem;
+    display: flex; justify-content: space-between;
+    align-items: center; gap: 2rem; flex-wrap: wrap;
+    background: var(--card);
+  }
+  .contact-text h3 { font-size: 1.6rem; font-weight: 800; margin-bottom: 0.5rem; }
+  .contact-text p { color: var(--muted); font-size: 0.9rem; }
+  .contact-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+  /* Footer */
+  footer {
+    position: relative; z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 2rem 2.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  footer p {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem; color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  /* Divider */
+  .divider {
+    border: none; border-top: 1px solid var(--border);
+    max-width: 1100px; margin: 0 auto;
+  }
+
+  /* Animations */
+  .fade-up {
+    opacity: 0; transform: translateY(24px);
+    animation: fadeUp 0.7s ease forwards;
+  }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .d1 { animation-delay: 0.1s; }
+  .d2 { animation-delay: 0.25s; }
+  .d3 { animation-delay: 0.4s; }
+  .d4 { animation-delay: 0.55s; }
+
+  @media (max-width: 768px) {
+    .stack { display: none; }
+    nav { padding: 1rem 1.5rem; }
+    section { padding: 3rem 1.5rem; }
+    .contact-inner { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <div class="nav-logo">yada</div>
+  <div class="nav-links">
+    <a href="#projects">Projects</a>
+    <a href="#skills">Skills</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <p class="hero-label fade-up d1">Full Stack Developer</p>
+  <h1 class="fade-up d2">
+    Yada<br>
+    <span>salangam</span>
+  </h1>
+  <p class="hero-desc fade-up d3">
+    สร้างระบบ web application ที่ใช้งานได้จริง เน้น performance และ UX ที่ดี ด้วย React, Node.js
+  </p>
+  <div class="hero-btns fade-up d4">
+    <a href="#projects" class="btn btn-primary">ดูผลงาน</a>
+    <a href="#contact" class="btn btn-outline">ติดต่อฉัน</a>
+  </div>
+
+  <div class="stack">
+    <span class="badge">React</span>
+    <span class="badge">Node.js</span>
+    <!-- <span class="badge">Python</span> -->
+    <span class="badge">PostgreSQL</span>
+    <span class="badge">Docker</span>
+    <!-- <span class="badge">AWS</span> -->
+  </div>
+</section>
+
+<hr class="divider">
+
+<section id="projects">
+  <p class="section-label">Selected work</p>
+  <h2>ผลงานที่ผ่านมา</h2>
+
+  <div class="projects-grid">
+    <div class="project-card">
+      <p class="project-num">01 — 2024</p>
+      <h3 class="project-title">ระบบจัดการสต็อกสินค้า</h3>
+      <p class="project-desc">Web app สำหรับ SME ในการติดตามสินค้าแบบ real-time รองรับผู้ใช้งาน 500+ คน ลด error จากการนับสต็อกมือ 80%</p>
+      <div class="project-tags">
+        <span class="tag">React</span>
+        <span class="tag">Node.js</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">Redis</span>
+      </div>
+      <a href="#" class="project-link">→ GitHub / Live Demo</a>
+    </div>
+
+    <div class="project-card">
+      <p class="project-num">02 — 2024</p>
+      <h3 class="project-title">API สำหรับ E-commerce</h3>
+      <p class="project-desc">RESTful API รองรับ 10,000 requests/min มี auth, payment gateway, และ webhook สำหรับ Shopee/Lazada</p>
+      <div class="project-tags">
+        <span class="tag">Python</span>
+        <span class="tag">FastAPI</span>
+        <span class="tag">Docker</span>
+        <span class="tag">AWS</span>
+      </div>
+      <a href="#" class="project-link">→ GitHub / Docs</a>
+    </div>
+
+    <div class="project-card">
+      <p class="project-num">03 — 2023</p>
+      <h3 class="project-title">Dashboard วิเคราะห์ข้อมูล</h3>
+      <p class="project-desc">Visualization tool ดึงข้อมูลจาก Google Analytics + CRM แสดงผล KPI สำคัญแบบ real-time</p>
+      <div class="project-tags">
+        <span class="tag">Vue.js</span>
+        <span class="tag">D3.js</span>
+        <span class="tag">Python</span>
+        <span class="tag">BigQuery</span>
+      </div>
+      <a href="#" class="project-link">→ GitHub / Live Demo</a>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<section id="skills">
+  <p class="section-label">Tech stack</p>
+  <h2>ทักษะ &amp; เครื่องมือ</h2>
+
+  <div class="skills-grid">
+    <div class="skill-item">
+      <p class="skill-category">Frontend</p>
+      <p class="skill-list">React / Next.js<br>Vue.js<br>TypeScript<br>Tailwind CSS</p>
+    </div>
+    <div class="skill-item">
+      <p class="skill-category">Backend</p>
+      <p class="skill-list">Node.js / Express<br>Python / FastAPI<br>REST &amp; GraphQL<br>WebSocket</p>
+    </div>
+    <div class="skill-item">
+      <p class="skill-category">Database</p>
+      <p class="skill-list">PostgreSQL<br>MongoDB<br>Redis<br>BigQuery</p>
+    </div>
+    <div class="skill-item">
+      <p class="skill-category">DevOps &amp; Cloud</p>
+      <p class="skill-list">Docker / K8s<br>AWS (EC2, S3, Lambda)<br>CI/CD GitHub Actions<br>Linux / Bash</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<section id="contact">
+  <p class="section-label">Get in touch</p>
+  <h2>ติดต่อ</h2>
+
+  <div class="contact-inner">
+    <!-- <div class="contact-text">
+      <h3>ยินดีรับโปรเจกต์ใหม่</h3>
+      <p>สนใจร่วมงาน หรือมีโปรเจกต์อยากคุย ทักมาได้เลยครับ</p>
+    </div> -->
+    <div class="contact-links">
+      <a href="mailto:cr.yada1997@email.com" class="btn btn-primary">cr.yada1997@email.com</a>
+      <a href="https://github.com/devroom777" class="btn btn-outline" target="_blank">GitHub</a>
+      <!-- <a href="https://linkedin.com/in/somchai" class="btn btn-outline" target="_blank">LinkedIn</a> -->
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Yada Salangam</p>
+  <p>Built with HTML, CSS, JS — Hosted on GitHub Pages</p>
+</footer>
+
+<!-- <script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.transform = `translate(${mx - 5}px, ${my - 5}px)`;
+  });
+
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.transform = `translate(${rx - 18}px, ${ry - 18}px)`;
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('.btn, .project-card, .badge').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.style.transform += ' scale(2.5)');
+    el.addEventListener('mouseleave', () => {});
+  });
+</script> -->
+</body>
+</html>
